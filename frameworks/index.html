@@ -12,17 +12,24 @@
 
   <script>{{{state}}}</script>
 
-  {{#each user_scripts}}
-  <script src="{{this}}"></script>
-  {{/each}}
-
   <script>
     var ZUUL = {};
     {{!-- Only add the support server port if it exists. Not using JSON.parse for backwards compatibility. --}}
     {{#if config.port}}
       ZUUL.port = {{config.port}};
     {{/if}}
+    window.scriptError = function(error) {
+      console.log("script load error....")
+      console.log(error)
+      console.error(error)
+    }
   </script>
-  <script src="/__zuul/framework.js"></script>
-  <script src="/__zuul/client.js"></script>
+
+  <script onerror="scriptError()" src="/__zuul/framework.js"></script>
+  <script onerror="scriptError()" src="/__zuul/client.js"></script>
+
+  {{#each user_scripts}}
+  <script onerror="scriptError()" src="{{this}}"></script>
+  {{/each}}
+
 </body>
