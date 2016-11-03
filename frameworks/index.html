@@ -5,16 +5,12 @@
 
   <link rel="stylesheet" href="/__zuul/zuul.css">
 </head>
-<body>
+<body onerror="scriptError();">
   <div id="zuul"></div>
 
   {{{user_html}}}
 
   <script>{{{state}}}</script>
-
-  {{#each user_scripts}}
-  <script src="{{this}}"></script>
-  {{/each}}
 
   <script>
     var ZUUL = {};
@@ -22,7 +18,17 @@
     {{#if config.port}}
       ZUUL.port = {{config.port}};
     {{/if}}
+    window.scriptError = function(error) {
+      console.log("script load error....");
+      console.log(error);
+      console.error(error);
+    };
   </script>
-  <script src="/__zuul/framework.js"></script>
-  <script src="/__zuul/client.js"></script>
+  <script onerror="scriptError();" src="/__zuul/framework.js"></script>
+  <script onerror="scriptError();" src="/__zuul/client.js"></script>
+
+  {{#each user_scripts}}
+  <script src="{{this}}"></script>
+  {{/each}}
+
 </body>
